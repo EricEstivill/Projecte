@@ -136,11 +136,14 @@ public class projecte {
             System.out.println("Stock: " + rs.getInt("Stock"));
             System.out.println("Proveidors: " + rs.getInt("Codi_prov"));
             System.out.println("Materials: " + rs.getString("Materials"));
+            System.out.println("Descr: " + rs.getString("Descr"));
+            System.out.println("Preu: " + rs.getInt("Preu"));
+
         }
     }
     static void altaProductes() throws SQLException{
         Scanner teclat = new Scanner (System.in);
-        String consulta = "INSERT INTO productes (Nom,Stock,Codi_prov,Materials) values(?,?,?,?)";
+        String consulta = "INSERT INTO productes (Nom,Stock,Codi_prov,Materials,Descr,Preu) values(?,?,?,?,?,?)";
         System.out.println("Posa un nom");
         String Nom =teclat.nextLine();
         System.out.println("Posa un numero de stock");
@@ -150,6 +153,10 @@ public class projecte {
         teclat.nextLine();
         System.out.println("Posa un Material");
         String Materials =teclat.nextLine();
+        System.out.println("Posa una Descripcio");
+        String Descr =teclat.nextLine();
+        System.out.println("Posa un Preu");
+        int Preu =teclat.nextInt();
         
    
         
@@ -161,6 +168,8 @@ public class projecte {
             sentencia.setInt(2, Stock);
             sentencia.setInt(3, Codi_prov);
             sentencia.setString(4, Materials);
+            sentencia.setString(5, Descr);
+            sentencia.setInt(6, Preu);
             sentencia.executeUpdate();
         } 
         catch (SQLException sqle) {
@@ -180,7 +189,7 @@ public class projecte {
 
     public static void modificarProductes() {
         Scanner teclat = new Scanner (System.in);
-        String consulta = "UPDATE productes SET Nom = ?, Stock = ?,  Codi_prov = ?, Materials = ? WHERE Nom = ?";
+        String consulta = "UPDATE productes SET Nom = ?, Stock = ?,  Codi_prov = ?, Materials = ?, Descr = ?, Preu = ? WHERE Nom = ?";
         System.out.println("Busca un nom");
         String Nom_nou =teclat.nextLine();
         System.out.println("Modifica el nom");
@@ -192,6 +201,10 @@ public class projecte {
         teclat.nextLine();
         System.out.println("Modifica el Material");
         String Materials =teclat.nextLine();
+        System.out.println("Modifica la Descripció");
+        String Descr =teclat.nextLine();
+        System.out.println("Modifica el Preu");
+        int Preu =teclat.nextInt();
         
         PreparedStatement sentencia = null;
          
@@ -201,7 +214,9 @@ public class projecte {
             sentencia.setInt(2, Stock);
             sentencia.setInt(3, Codi_prov);
             sentencia.setString(4, Materials);
-            sentencia.setString(5, Nom_nou);
+            sentencia.setString(5, Descr);
+            sentencia.setInt(6, Preu);
+            sentencia.setString(7, Nom_nou);
             sentencia.executeUpdate();
         } 
         catch (SQLException sqle) {
