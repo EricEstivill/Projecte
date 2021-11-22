@@ -1,0 +1,79 @@
+DROP DATABASE IF EXISTS Projecte;
+
+create database Projecte;
+USE Projecte;
+
+
+DROP TABLE IF EXISTS PRODUCTES; 
+DROP TABLE IF EXISTS PROVEIDOR;
+DROP TABLE IF EXISTS CATEGORIES;
+DROP TABLE IF EXISTS EQUIVALENT;
+DROP TABLE IF EXISTS PERTANY;
+
+create table PROVEIDOR (
+	Codi_pro INT(8) PRIMARY KEY,
+    Nom VARCHAR(15));
+    
+create table PRODUCTES (
+	Codi_id INT(8) PRIMARY KEY auto_increment,
+    Nom VARCHAR(100),
+    Stock INT(8),
+    Codi_prov INT(8),
+    Materials VARCHAR(50),
+    Descr VARCHAR(200),
+    Preu INT(6),
+	FOREIGN KEY (Codi_prov) REFERENCES PROVEIDOR(Codi_pro));
+    
+create table CATEGORIES (
+	Codi_cat INT(8) PRIMARY KEY auto_increment,
+    Nom VARCHAR(25));
+
+create table EQUIVALENT (
+	Codi_id INT(8) PRIMARY KEY,
+    Codi_id_2 INT(8),
+    FOREIGN KEY (Codi_id) REFERENCES PRODUCTES (Codi_id),
+    FOREIGN KEY (Codi_id_2) REFERENCES PRODUCTES (Codi_id));
+
+create table PERTANY (
+	Codi_cat INT(8) PRIMARY KEY,
+    Codi_id INT(8),
+    FOREIGN KEY (Codi_id) REFERENCES PRODUCTES (Codi_id),
+    FOREIGN KEY (Codi_cat) REFERENCES CATEGORIES (Codi_cat));
+    
+desc PRODUCTES;
+desc PROVEIDOR;
+desc CATEGORIES;
+show tables;
+
+
+
+INSERT INTO PROVEIDOR VALUES(1,'Corsair');
+INSERT INTO PROVEIDOR VALUES(2,'Logitech');
+INSERT INTO PROVEIDOR VALUES(3,'NitroPC');
+INSERT INTO PROVEIDOR VALUES(4,'AEG');
+INSERT INTO PROVEIDOR VALUES(5,'Orbegozo');
+
+
+
+INSERT INTO PRODUCTES VALUES(1,'Logitech SuperLight G pro X ',3, 2, 'Alumini', 'Pes: 63g, Velocitat Resposta: 1ms, Microprocesador: ARM 32 bits, Batería: 70h.', 155);
+INSERT INTO PRODUCTES VALUES(2,'Cascos Logitech g pro',1, 2, 'Alumini','Cable: 2m, Resposta FreQ: 20HZ-20KHZ', 79.47);
+INSERT INTO PRODUCTES VALUES(3,'RAM Corsair Vengeance 2X16GB DDR4 3200MHz',5, 1, 'Alumini', '2X16GB, DDR4, 3200MHz, CL16,', 182);
+INSERT INTO PRODUCTES VALUES(4,'PC GAMING Gold',1, 3, 'Alumini', 'Ryzen 5 3600, GTX 1650 4GB, 16GB, M.2 512GB, HDD 1TB', 920);
+INSERT INTO PRODUCTES VALUES(5,'AEG L6FBI821U LAVADORA BLANCA 8KG',5, 4, 'Alumini', 'PES: 8KG, VELOCITAT: 1200 RPM, CLASE: E, POTES: 4, POTÈNCIA: 2200W', 445);
+INSERT INTO PRODUCTES VALUES(6,'MÀQUINA CAFÈ FILTRO ORBEGOZO - CG 4014',7, 5, 'Alumini', 'Capacitat de 6 tases de cafè, Filtre permanent, Jarra de vidre, Cafè calent durant 30 minuts, Potència: 650W', 17.46);
+
+
+INSERT INTO CATEGORIES VALUES(1, 'Procesadors');
+INSERT INTO CATEGORIES VALUES(2, 'Electrodomèstics');
+INSERT INTO CATEGORIES VALUES(3, 'Mobles');
+INSERT INTO CATEGORIES VALUES(4, 'PC');
+INSERT INTO CATEGORIES VALUES(5, 'Portàtils');
+INSERT INTO CATEGORIES VALUES(6, 'Perifèrics');
+INSERT INTO CATEGORIES VALUES(7, 'Targetes Gràfiques');
+INSERT INTO CATEGORIES VALUES(8, 'Discs durs');
+INSERT INTO CATEGORIES VALUES(9, 'Torre');
+INSERT INTO CATEGORIES VALUES(10, 'Font alimentació');
+INSERT INTO CATEGORIES VALUES(11, 'Placa Base');
+INSERT INTO CATEGORIES VALUES(12, 'Refrigeració');
+INSERT INTO CATEGORIES VALUES(13, 'SAI');
+
