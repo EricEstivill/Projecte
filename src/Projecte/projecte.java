@@ -6,11 +6,23 @@
 package Projecte;
 
 import static Projecte.projecte.connectarBD;
+import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 /**
  *
@@ -19,8 +31,14 @@ import java.util.Scanner;
    
 
 public class projecte {
+    public static String[] palabras;
+    public static int part1 ;
+    public static int part2 ;
+    public static String PATHPENDENTS = "files/ENTRADES PENDENTS/";
+    public static String PATHPROCESADES = "files/ENTRADES PROCESADES/";
     static Connection connectarBD = null;
-    public static void main (String[] args) throws SQLException {
+    public static void main (String[] args) throws SQLException, IOException {
+       
         boolean sortir=false;
         connectarBD();
         Scanner teclat = new Scanner (System.in);
@@ -67,10 +85,26 @@ public class projecte {
     }
           
 
-    static void actualitzarStocks(){
+    static void actualitzarStocks() throws IOException, SQLException{
+        
         System.out.println("Actualitzar Stock");
+        File file = new File(PATHPENDENTS);
+        
+        if (file.isDirectory()){
+            File[] files = file.listFiles();
+            for(int i=0;i<files.length;i++){
+                System.out.println("fitxer: " + files[i]);
+                visualitzarActualitzarFitxer(files[i]);
+                moureFitxerAProcessat(files[i]);
+                
+            }
+        } else {
+            System.out.println("No es un fitxer");
+        }
 
     }
+    
+
     static void generarComanda(){
         System.out.println("Generar comanda");
     }
@@ -241,7 +275,7 @@ public class projecte {
         String consulta = "DELETE FROM productes WHERE Nom  = ?";
         System.out.println("Borra un Producte");
         String Nom =teclat.nextLine();
-
+        
         
         PreparedStatement sentencia = null;
  
@@ -249,6 +283,7 @@ public class projecte {
           sentencia = connectarBD.prepareStatement(consulta);
           sentencia.setString(1, Nom);
           sentencia.executeUpdate();
+          
 
         } 
         catch (SQLException sqle) {
@@ -282,5 +317,52 @@ public class projecte {
 
             }
     } 
-            
+
+        static void visualitzarActualitzarFitxer(File file) throws FileNotFoundException, IOException, SQLException {
+       
+        FileReader reader = new FileReader (file);
+        
+        BufferedReader buffer = new BufferedReader(reader);
+        
+               
+        String linea;
+        while((linea=buffer.readLine()) !=null){
+             System.out.println(linea);
+            int posSep = linea.indexOf(":");
+
+            int Codi_id = Integer.parseInt(linea.substring(0, posSep));
+            int Stock = Integer.parseInt(linea.substring(posSep + 1));
+
+            String update = "UPDATE productes SET Stock=Stock+? WHERE Codi_id=?";
+            PreparedStatement actualitzar = connectarBD.prepareStatement(update);
+            actualitzar.setInt(1, Stock);
+            actualitzar.setInt(2, Codi_id);
+
+            actualitzar.executeUpdate();
+        }
+        buffer.close();
+        reader.close();
+        
+        
+    }
+
+    static void moureFitxerAProcessat(File file) throws IOException {
+        FileSystem sistemaFitxers=FileSystems.getDefault();
+        Path origen=sistemaFitxers.getPath(PATHPENDENTS + file.getName());
+        Path desti=sistemaFitxers.getPath(PATHPROCESADES +file.getName());
+        
+        Files.move(origen,desti, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("S'ha mogut a procesats el fitxer: " + file.getName());
+      
+        
+        
+    }
+    
+   
+
+ 
+
+ 
+
+          
 }
