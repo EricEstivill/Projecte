@@ -1,0 +1,10 @@
+^^^^^Electroimp^^^^^
+
+____________________________________
+Codi client: 245710
+Telèfon: 973537843
+Correu: electro@gmail.com
+____________________________________
+Codi	Nom		Stock	Proveidor
+2	Ordenador	10	Logitech
+1	Cafetera	42	Logitech

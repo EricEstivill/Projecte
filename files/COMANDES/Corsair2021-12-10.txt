@@ -1,0 +1,10 @@
+^^^^^Electroimp^^^^^
+
+____________________________________
+Codi client: 245710
+Telèfon: 973537843
+Correu: electro@gmail.com
+____________________________________
+Codi	Nom		Stock	Proveidor
+22	Portatil	10	Corsair
+3	Silla gaming	33	Corsair

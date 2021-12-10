@@ -1,0 +1,9 @@
+^^^^^Electroimp^^^^^
+
+____________________________________
+Codi client: 245710
+Telèfon: 973537843
+Correu: electro@gmail.com
+____________________________________
+Codi	Nom		Stock	Proveidor
+5	Procesador	17	AEG
