@@ -173,8 +173,9 @@ public class projecte {
                   
     } 
 
-    public static void desconnexioBD() {
+    public static void desconnexioBD() throws SQLException {
         System.out.println("Desconnectat de la BD");
+        connectarBD.close();
     }
 
     
