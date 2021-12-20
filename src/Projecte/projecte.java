@@ -49,8 +49,8 @@ public class projecte {
     public static String PATHPROCESADES = "files/ENTRADES PROCESADES/";
     static Connection connectarBD = null;
     private static int MAXSTOCK;
-    public static String [] Proveidor_Array= new String[5];
-    public static int [] Productes_Array = new int[5];
+    public static String [] Proveidor_Array= new String[100];
+    public static int [] Productes_Array = new int[100];
     public static void main (String[] args) throws SQLException, IOException {
        
         boolean sortir=false;
@@ -59,6 +59,7 @@ public class projecte {
         Scanner st = new Scanner(System.in);
         
             //12/11/21
+        //Creem el primer menú que ens apareixerà al iniciar el programa
         do{
            System.out.println("^^^^MENU GESTOR PRODUCTES^^^^");
            System.out.println("1.Manteniment de productes A/B/M/C");
@@ -104,6 +105,7 @@ public class projecte {
           
 
     static void actualitzarStocks() throws IOException, SQLException{
+        //Fem que mogui un arxiu a una altra carpeta configurant la programació en diferents apartats, visualitzarActualitzarFitxer i moureFitxerAProcessat
         
         System.out.println("Actualitzar Stock");
         File file = new File(PATHPENDENTS);
@@ -129,6 +131,7 @@ public class projecte {
         Scanner teclat = new Scanner (System.in);
         Scanner st = new Scanner(System.in);
         boolean enrere=false;
+        //Creem el menú que ens apareixerà al escollir la primera opció
         do{
            System.out.println("\n^^^^MENU GESTOR PRODUCTES^^^^");
            System.out.println("1.Llista Productes");
@@ -177,20 +180,24 @@ public class projecte {
     
 
     public static void llistaProductes() throws SQLException {
+        
+        //Llistem tots els productes que tenim a la nostra base de dades
         System.out.println("Llistem productes");
         String consulta ="SELECT * FROM productes ORDER BY Codi_id";
         PreparedStatement ps = connectarBD.prepareStatement(consulta);
         ResultSet rs=ps.executeQuery();
         
         while (rs.next()){
-            System.out.println("Id: " + rs.getInt("Codi_id") + " Preu:  " + rs.getString("preu") + " Materials:  " + rs.getString("Materials")
-                            + " Nom:  " + rs.getString("Nom") + " Stock:  " + rs.getString("Stock"));
+            System.out.println("Id: " + rs.getInt("Codi_id") + " Nom: " + rs.getString("Nom") + " Materials: " + rs.getString("Materials")
+                              + " Stock: " + rs.getString("Stock") + " Preu: " + rs.getString("preu") );
 
         }
     }
     
    
     static void altaProductes() throws SQLException{
+        
+        //Escollim les dades que volem posar del nou producte
         Scanner teclat = new Scanner (System.in);
         String consulta = "INSERT INTO productes (Nom,Stock,Codi_prov,Materials,Descr,Preu) values(?,?,?,?,?,?)";
         System.out.println("Posa un nom");
@@ -198,7 +205,7 @@ public class projecte {
         System.out.println("Posa un numero de stock");
         Stock =teclat.nextInt();
         System.out.println("Posa un numero de Proveidors");
-        int Codi_prov =teclat.nextInt();
+        Codi_prov =teclat.nextInt();
         teclat.nextLine();
         System.out.println("Posa un Material");
         Materials =teclat.nextLine();
@@ -246,7 +253,7 @@ public class projecte {
         boolean enrere=false;
         Scanner teclat = new Scanner (System.in);
         Scanner st = new Scanner(System.in);
-
+        //Creem l'apartat per poder modificar els productes per ID o per Nom
         do {
 
             System.out.println("com vols identificar el producte que vols modificar");
@@ -305,10 +312,7 @@ public class projecte {
                                 "Codi_id: " + Codi_id + " Preu " + Preu + " euros" + " Materials " + Materials + " Nom " + Nom
                                         + " Stock " + Stock);
                     }
-                    // String insNomProd = "nom =\"%s\"".formatted(nomProd);
-                    // insNomProd = String.format("nom = \"%s\" ", nomProd);
-                    // String insNomProd = "nom =" + "\"nomProd"\"";
-                    // System.out.println(insNomProd);
+
                     enrere = false;
                     modificarProductes2();
                     break;
@@ -328,6 +332,7 @@ public class projecte {
         boolean enrere=false;
         Scanner teclat = new Scanner (System.in);
         Scanner st = new Scanner(System.in);
+        //Creem el 2n apartat el que permet modificar l'atribut que volguem d'un producte
         do {
 
             System.out.println("Que vols modifica ?");
@@ -389,6 +394,7 @@ public class projecte {
         boolean enrere=false;
         Scanner teclat = new Scanner (System.in);
         Scanner st = new Scanner(System.in);
+        //Creem les dos opcions per esborrar dades
         do {
 
             System.out.println("Com vols identificar el producte per esborrar?");
@@ -400,6 +406,7 @@ public class projecte {
             char opcio2 = sa.charAt(0);
             System.out.println("la opcio: " + opcio2);
             switch (opcio2) {
+                //Creem la primera opció la cual podem escollir per la id i obtenir el codi i el nom de la base de dades
                 case '1':
                     System.out.println("Posar la ID");
                     Codi_id = teclat.nextInt();
@@ -413,6 +420,7 @@ public class projecte {
                     }
                     enrere = false;
                     break;
+                //Creem la segona opció la cual podem escollir per el nom i obtenir el codi i el nom de la base de dades
                 case '2':
                     System.out.println("Posar el nom del producte");
 
@@ -452,7 +460,7 @@ public class projecte {
 
     }
     static void connectarBD(){
-
+            //Connexió a la base de dades
             String servidor="jdbc:mysql://localhost:3306/";
             String bbdd="projecte";
             String user="root";
@@ -516,13 +524,14 @@ public class projecte {
         FileWriter fw = null;
         BufferedWriter bw = null;
         PrintWriter pw = null;
+        //Agafem les dades de la base de dades
         String consulta = "SELECT prod.Codi_id, prod.Nom, prod.Stock, prov.Nom FROM productes prod, proveidor prov WHERE prod.Codi_prov=prov.Codi_pro AND prod.Stock<=80 ORDER by prov.Codi_pro";
         PreparedStatement ps = connectarBD.prepareStatement(consulta);
         ResultSet rs = ps.executeQuery();
         
         int contadorProveidors=0;
         int contadorProductes=0;
-        
+        //Fem que creii un arxiu .txt per a cada proveidor amb els seus productes i la seva informació dins de l'arxiu
         if (rs.next()){
             Proveidor = rs.getString(4);
             Proveidor_Array[contadorProveidors]=rs.getString(4);
@@ -573,34 +582,35 @@ public class projecte {
 
     }
     
+    
     static void consultarComandes() throws SQLException{
         boolean enrere=false;
         Scanner teclat = new Scanner (System.in);
-        String consulta = "SELECT Codi_pro, Nom FROM proveidor ";
-        PreparedStatement ps = connectarBD.prepareStatement(consulta);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Codi_pro = rs.getInt(1);
-            Nom = rs.getString(2);
-        }
+        //
         int min=Productes_Array[0];
         int max=Productes_Array[0];
         double med=0;
         int y=0;
         int a=0;
-        
+        int f=0;
+        //Diem quants productes té cada proveidor
         for (int i=0;i<Proveidor_Array.length;i++){
+            if(Proveidor_Array[i]!=null){
             System.out.println("Proveidors: " + Proveidor_Array[i] + "  Productes: " + Productes_Array[i]);
-            
+            }
         }
-        
+        //El proveidor amb menys productes
         for(int i=0;i<Productes_Array.length;i++){
-            if(Productes_Array[i]<min){
-            min=Productes_Array[i];
-            a=i;
-            }   
+            if(Proveidor_Array[i]!=null){
+                if(Productes_Array[i]<min){
+                min=Productes_Array[i];
+                a=i;
+                }
+            }
         }System.out.println("El proveidor: " + Proveidor_Array[a] + " és el proveidor amb menys productes amb un total de: " + min + " productes");
         
+        
+        //El proveidor amb més productes
         for(int i=0;i<Productes_Array.length;i++){
             if(Productes_Array[i]>max){
             max=Productes_Array[i];
@@ -608,11 +618,14 @@ public class projecte {
             }
         }System.out.println("El proveidor " + Proveidor_Array[y] + " és el proveidor amb més productes amb un total de: " + max + " productes ");
         
+        //La mitjana de productes de tots els proveidors
         for(int i=0;i<Productes_Array.length;i++){
+            if(Proveidor_Array[i]!=null){
             med = med + Productes_Array[i];
-            
-        }med = med/Proveidor_Array.length;
-        System.out.println("Productes Mitja : " + med);
+            f=i + 1;
+            }
+        }
+        System.out.println("Productes Mitja : " + med/f);
            
     }     
 }
